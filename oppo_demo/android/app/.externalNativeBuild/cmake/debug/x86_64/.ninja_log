@@ -1,0 +1,7 @@
+# ninja log v5
+1	713	577122844	CMakeFiles/native-lib.dir/src/main/cpp/NDKLib.cpp.o	88869062ea94d8e1
+714	1281	577122845	C:/Users/juhyg/Desktop/oppo_demo/build/app/intermediates/cmake/debug/obj/x86_64/libnative-lib.so	5b0b16c9381a46fb
+4	1357	577123584	CMakeFiles/native-lib.dir/src/main/cpp/NDKLib.cpp.o	88869062ea94d8e1
+1358	2028	577123585	C:/Users/juhyg/Desktop/oppo_demo/build/app/intermediates/cmake/debug/obj/x86_64/libnative-lib.so	5b0b16c9381a46fb
+4	323	577123651	CMakeFiles/native-lib.dir/src/main/cpp/NDKLib.cpp.o	88869062ea94d8e1
+324	570	577123651	C:/Users/juhyg/Desktop/oppo_demo/build/app/intermediates/cmake/debug/obj/x86_64/libnative-lib.so	5b0b16c9381a46fb

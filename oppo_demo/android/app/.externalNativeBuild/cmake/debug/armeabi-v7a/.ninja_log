@@ -1,0 +1,7 @@
+# ninja log v5
+1	282	577122846	CMakeFiles/native-lib.dir/src/main/cpp/NDKLib.cpp.o	4bd018ba4d2094f3
+283	443	577122846	C:/Users/juhyg/Desktop/oppo_demo/build/app/intermediates/cmake/debug/obj/armeabi-v7a/libnative-lib.so	5a52e8fd25aa2a3a
+5	335	577123587	CMakeFiles/native-lib.dir/src/main/cpp/NDKLib.cpp.o	4bd018ba4d2094f3
+335	905	577123588	C:/Users/juhyg/Desktop/oppo_demo/build/app/intermediates/cmake/debug/obj/armeabi-v7a/libnative-lib.so	5a52e8fd25aa2a3a
+4	286	577123653	CMakeFiles/native-lib.dir/src/main/cpp/NDKLib.cpp.o	4bd018ba4d2094f3
+286	488	577123653	C:/Users/juhyg/Desktop/oppo_demo/build/app/intermediates/cmake/debug/obj/armeabi-v7a/libnative-lib.so	5a52e8fd25aa2a3a
