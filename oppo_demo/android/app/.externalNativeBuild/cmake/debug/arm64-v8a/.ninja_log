@@ -1,7 +1,0 @@
-# ninja log v5
-1	175	577122846	CMakeFiles/native-lib.dir/src/main/cpp/NDKLib.cpp.o	5a6806984746fc05
-176	306	577122846	C:/Users/juhyg/Desktop/oppo_demo/build/app/intermediates/cmake/debug/obj/arm64-v8a/libnative-lib.so	e02584a79b72704
-5	325	577123586	CMakeFiles/native-lib.dir/src/main/cpp/NDKLib.cpp.o	5a6806984746fc05
-325	920	577123587	C:/Users/juhyg/Desktop/oppo_demo/build/app/intermediates/cmake/debug/obj/arm64-v8a/libnative-lib.so	e02584a79b72704
-5	326	577123652	CMakeFiles/native-lib.dir/src/main/cpp/NDKLib.cpp.o	5a6806984746fc05
-327	513	577123653	C:/Users/juhyg/Desktop/oppo_demo/build/app/intermediates/cmake/debug/obj/arm64-v8a/libnative-lib.so	e02584a79b72704

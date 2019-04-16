@@ -1,3 +1,0 @@
-C:/Users/juhyg/Desktop/oppo_demo/android/app/.externalNativeBuild/cmake/debug/arm64-v8a/CMakeFiles/native-lib.dir
-C:/Users/juhyg/Desktop/oppo_demo/android/app/.externalNativeBuild/cmake/debug/arm64-v8a/CMakeFiles/edit_cache.dir
-C:/Users/juhyg/Desktop/oppo_demo/android/app/.externalNativeBuild/cmake/debug/arm64-v8a/CMakeFiles/rebuild_cache.dir
