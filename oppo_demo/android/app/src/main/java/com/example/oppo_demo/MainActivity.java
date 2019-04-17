@@ -3,10 +3,13 @@ package com.example.oppo_demo;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Base64;
 
 import android.os.Bundle;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.content.res.AssetManager;
+import android.content.res.AssetFileDescriptor;
 
 import io.flutter.app.FlutterActivity;
 import io.flutter.plugin.common.MethodCall;
@@ -14,6 +17,7 @@ import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugins.GeneratedPluginRegistrant;
+import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 public class MainActivity extends FlutterActivity {
   private static final String CHANNEL = "deeplab.ncnn/run";
@@ -30,7 +34,7 @@ public class MainActivity extends FlutterActivity {
         @Override
         public void onMethodCall(MethodCall call, Result result) {
           if (call.method.equals("init")) {
-            initNet(result);
+            initNet(call, result);
           } else if (call.method.equals("run")) {
             run((String)call.argument("imagePath"), result);
           } else {
@@ -41,31 +45,19 @@ public class MainActivity extends FlutterActivity {
     );
   }
 
-  private void initNet(Result result) {
+  private void initNet(MethodCall call, Result result) {
     byte[] param = null;
     byte[] bin = null;
 
-    try {
-      param = readFromAssets("weights/deeplab_mob.param");
-      bin = readFromAssets("weights/deeplab_mob.bin");
-    } catch (Exception e) {
-      result.error("Can not init!", e.toString(), null);
-      return;
-    }
+    String param_encoded = call.argument("param");
+    String bin_encoded = call.argument("bin");
+
+    param = Base64.getDecoder().decode(param_encoded);
+    bin = Base64.getDecoder().decode(bin_encoded);
 
     boolean isNetOk = s.init(param, bin);
 
     result.success(isNetOk);
-  }
-
-  private byte[] readFromAssets(String name) throws IOException {
-    byte[] ptr;
-    InputStream ins = getAssets().open(name);
-    int available = ins.available();
-    ptr = new byte[available];
-    int code = ins.read(ptr);
-    ins.close();
-    return ptr;
   }
 
   private void run(String imagePath, Result result) {
