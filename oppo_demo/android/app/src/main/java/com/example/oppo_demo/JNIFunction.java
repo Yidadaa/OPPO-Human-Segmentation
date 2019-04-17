@@ -5,5 +5,6 @@ public class JNIFunction {
         System.loadLibrary("native-lib");
     }
 
-    public native String test(String name);
+    public native boolean init(byte[] param, byte[] bin);
+    public native byte[] run(byte[] image, int w, int h);
 }

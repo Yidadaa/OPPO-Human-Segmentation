@@ -9,11 +9,19 @@ extern "C" {
 #endif
 /*
  * Class:     com_example_oppo_demo_JNIFunction
- * Method:    test
- * Signature: (Ljava/lang/String;)Ljava/lang/String;
+ * Method:    init
+ * Signature: ([B[B)Z
  */
-JNIEXPORT jstring JNICALL Java_com_example_oppo_1demo_JNIFunction_test
-  (JNIEnv *, jobject, jstring);
+JNIEXPORT jboolean JNICALL Java_com_example_oppo_1demo_JNIFunction_init
+  (JNIEnv *, jobject, jbyteArray, jbyteArray);
+
+/*
+ * Class:     com_example_oppo_demo_JNIFunction
+ * Method:    run
+ * Signature: ([BII)[B
+ */
+JNIEXPORT jbyteArray JNICALL Java_com_example_oppo_1demo_JNIFunction_run
+  (JNIEnv *, jobject, jbyteArray, jint, jint);
 
 #ifdef __cplusplus
 }
