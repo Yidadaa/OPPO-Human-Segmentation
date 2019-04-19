@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/services.dart';
-import 'dart:convert';
 
 import 'package:camera/camera.dart';
+
+import 'utils.dart';
+import 'gallary.dart';
 
 List<CameraDescription> cameras;
 
@@ -41,17 +44,55 @@ class _MyHomePageState extends State<MyHomePage> {
   static const platform = const MethodChannel('deeplab.ncnn/run');
   CameraController camController;
   int cameraIndex = 0;
+  File latestFile;
 
-  Future initNet() async {
-    ByteData param = await rootBundle.load("weights/deeplab_mob.param");
-    ByteData bin = await rootBundle.load("weights/deeplab_mob.bin");
-    String pstr = base64.encode(param.buffer.asUint8List());
-    String bstr = base64.encode(bin.buffer.asUint8List());
-    print(param.buffer.asUint8List().length);
-    print(bin.buffer.asUint8List().length);
-    var result =
-        await platform.invokeMethod("init", {"param": pstr, "bin": bstr});
-    print("res: " + result.toString());
+  void switchCamera() {
+    setState(() {
+      cameraIndex = 1 - cameraIndex;
+    });
+    initCamera();
+  }
+
+  void regfreshImageIcon() async {
+    File _latestFile = await getLatestImageFile();
+    setState(() {
+      latestFile = _latestFile;
+    });
+  }
+
+  void initCamera() {
+    var _camController =
+        CameraController(cameras[cameraIndex], ResolutionPreset.medium);
+    _camController.initialize().then((_) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        camController = _camController;
+      });
+    });
+  }
+
+  Future<String> takePicture() async {
+    String imgPath = await getNewImagePath();
+    if (camController.value.isTakingPicture) {
+      return null;
+    }
+    try {
+      await camController.takePicture(imgPath);
+    } catch (e) {
+      print(e);
+      return null;
+    }
+    File thumbFile = await buildThumbnailOf(imgPath);
+    setState(() {
+      latestFile = thumbFile;
+    });
+    return thumbFile.path;
+  }
+
+  void gotoGallery() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => GallaryPage()));
   }
 
   Widget titleBar() {
@@ -60,16 +101,14 @@ class _MyHomePageState extends State<MyHomePage> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           IconButton(
-            icon: Icon(
-              [Icons.camera_front, Icons.camera_rear][cameraIndex],
-              color: Colors.white,
-              size: iconSize,
-            ),
+            icon: Icon([Icons.camera_front, Icons.camera_rear][cameraIndex],
+                color: Colors.white),
+            iconSize: iconSize,
             onPressed: switchCamera,
           ),
           IconButton(
             icon: Icon(
-              Icons.screen_rotation,
+              Icons.blur_on,
               color: Colors.white,
               size: iconSize,
             ),
@@ -77,7 +116,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           IconButton(
             icon: Icon(
-              Icons.screen_rotation,
+              Icons.color_lens,
               color: Colors.white,
               size: iconSize,
             ),
@@ -87,47 +126,45 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget actionBar() {
-    const double size = 40.0;
+    const double iconSize = 40.0;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        Icon(
-          Icons.videocam,
-          color: Colors.white,
-          size: size,
+        IconButton(
+          icon: Icon(
+            Icons.videocam,
+            color: Colors.white,
+          ),
+          iconSize: iconSize,
+          onPressed: () {},
         ),
-        Icon(
-          Icons.album,
+        IconButton(
+          icon: Icon(
+            Icons.album,
+          ),
           color: Colors.white,
-          size: size * 2,
+          iconSize: iconSize * 2,
+          onPressed: takePicture,
         ),
-        Icon(
-          Icons.image,
-          color: Colors.white,
-          size: size,
-        )
+        latestFile == null
+            ? IconButton(
+                icon: Icon(
+                  Icons.image,
+                ),
+                color: Colors.white,
+                iconSize: iconSize,
+                onPressed: gotoGallery,
+              )
+            : InkWell(
+                child: Image.file(
+                  latestFile,
+                  width: iconSize,
+                ),
+                onTap: gotoGallery,
+              )
       ],
     );
-  }
-
-  void switchCamera() {
-    setState(() {
-      cameraIndex = 1 - cameraIndex;
-    });
-    initCamera();
-  }
-
-  void initCamera() {
-    var _camController = CameraController(cameras[cameraIndex], ResolutionPreset.medium);
-    _camController.initialize().then((_) {
-      if (!mounted) {
-        return;
-      }
-      setState(() {
-        camController = _camController;
-      });
-    });
   }
 
   @override
@@ -144,7 +181,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    if (!camController.value.isInitialized) {
+    if (camController == null || !camController.value.isInitialized) {
       return Container();
     }
     return Scaffold(
