@@ -6,5 +6,5 @@ public class JNIFunction {
     }
 
     public native boolean init(byte[] param, byte[] bin);
-    public native byte[] run(byte[] image, int w, int h);
+    public native int run(byte[] image, int w, int h);
 }

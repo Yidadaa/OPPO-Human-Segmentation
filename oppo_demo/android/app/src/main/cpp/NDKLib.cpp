@@ -8,6 +8,7 @@
 
 #include "com_example_oppo_demo_JNIFunction.h"
 #include "net.h"
+#include "mat.h"
 
 static std::vector<unsigned char> param_buf;
 static std::vector<unsigned char> bin_buf;
@@ -46,7 +47,34 @@ JNIEXPORT jboolean JNICALL Java_com_example_oppo_1demo_JNIFunction_init
  * Method:    run
  * Signature: (Landroid/graphics/Bitmap;)Landroid/graphics/Bitmap;
  */
-JNIEXPORT jbyteArray JNICALL Java_com_example_oppo_1demo_JNIFunction_run
-    (JNIEnv *, jobject, jbyteArray, jint, jint) {
-  return NULL;
+JNIEXPORT jint JNICALL Java_com_example_oppo_1demo_JNIFunction_run
+    (JNIEnv *env, jobject obj, jbyteArray array, jint w, jint h) {
+  unsigned char* rgbdata = NULL;
+  unsigned char* outdata = NULL;
+  jbyte* bytes;
+  bytes = env->GetByteArrayElements(array, 0);
+  int len = env->GetArrayLength(array);
+  rgbdata = new unsigned char[len + 1];
+  memset(rgbdata, 0, len + 1);
+  memcpy(rgbdata, bytes, len);
+  rgbdata[len] = 0;
+
+  env->ReleaseByteArrayElements(array, bytes, 0);
+
+  ncnn::Mat in = ncnn::Mat::from_pixels(rgbdata, 1, w, h);
+
+  ncnn::Mat out;
+  ncnn::Extractor ex = net.create_extractor();
+
+  ex.set_light_mode(true);
+  ex.input(0, in);
+  ex.extract(208, out);
+
+  out.to_pixels(outdata, ncnn::Mat::PIXEL_RGB);
+
+  int n = in.w + in.h + in.c;
+
+  jbyteArray ret = env->NewByteArray(n);
+
+  return n;
 }

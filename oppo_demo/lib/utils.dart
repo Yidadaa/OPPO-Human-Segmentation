@@ -58,6 +58,18 @@ Future<List<File>> getAllImageFiles(String dir, {sort: false}) async {
   return files;
 }
 
+String getSrcPathOf(String path) {
+  print("[getSrcPathOf]" + path);
+  String base = basename(path);
+  return rootDir + base;
+}
+
+String getCompressedPathOf(String path) {
+  print("[getCompressedPathOf]" + path);
+  String base = basename(path);
+  return compressedDir + base;
+}
+
 Future initNet(MethodChannel platform) async {
   ByteData param = await rootBundle.load("weights/deeplab_mob.param");
   ByteData bin = await rootBundle.load("weights/deeplab_mob.bin");

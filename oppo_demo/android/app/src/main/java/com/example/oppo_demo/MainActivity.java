@@ -70,7 +70,7 @@ public class MainActivity extends FlutterActivity {
 
     byte[] imgBuffer = stream.toByteArray();
 
-    byte[] res = s.run(imgBuffer, w, h);
-    result.success(res);
+    int res = s.run(imgBuffer, w, h);
+    result.success(String.valueOf(res) + '_' + String.valueOf(imgBuffer.length));
   }
 }

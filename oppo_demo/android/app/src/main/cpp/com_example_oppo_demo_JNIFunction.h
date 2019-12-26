@@ -20,7 +20,7 @@ JNIEXPORT jboolean JNICALL Java_com_example_oppo_1demo_JNIFunction_init
  * Method:    run
  * Signature: ([BII)[B
  */
-JNIEXPORT jbyteArray JNICALL Java_com_example_oppo_1demo_JNIFunction_run
+JNIEXPORT jint JNICALL Java_com_example_oppo_1demo_JNIFunction_run
   (JNIEnv *, jobject, jbyteArray, jint, jint);
 
 #ifdef __cplusplus
